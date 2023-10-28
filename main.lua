@@ -20,17 +20,22 @@ local function rectangle_from_bounds(bounds)
   return {bounds[1], bounds[2], bounds[3]-bounds[1], bounds[4]-bounds[2] }
 end
 
+local function rectangle_bounds_intersect_boolean(bounds1, bounds2)
+  local intersect_boolean = 
+  bounds1[1] < bounds2[3] and
+  bounds1[3] > bounds2[1] and
+  bounds1[2] < bounds2[4] and
+  bounds1[4] > bounds2[2]
+  return intersect_boolean  
+end
+
 -- rettangolo operazione intersezione
 -- - intersezione di 2 rettagoli -> rettangolo anche nullo : rectangle_operation_intersection
 local function rectangle_operation_intersection(rectangle1, rectangle2)
   local bounds1 = rectangle_bounds(rectangle1)
   local bounds2 = rectangle_bounds(rectangle2)
   
-  local intersect_boolean = 
-  bounds1[1] < bounds2[3] and
-  bounds1[3] > bounds2[1] and
-  bounds1[2] < bounds2[4] and
-  bounds1[4] > bounds2[2]
+  local intersect_boolean = rectangle_bounds_intersect_boolean(bounds1, bounds2)
   
   if not intersect_boolean then
     return nil
