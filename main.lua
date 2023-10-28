@@ -52,9 +52,24 @@ local function rectangle_operation_intersection(rectangle1, rectangle2)
   return intersection_rectangle
 end
 
+------------------------------------------------
+local function point_inside_rectangle(point, rectangle)
+  return
+    point[1]>=rectangle[1] and
+    point[1]<=(rectangle[1]+rectangle[3]) and
+    point[2]>=rectangle[2] and
+    point[2]<=(rectangle[2]+rectangle[4])
+end
+
+local function point_mouse_position()
+  return {love.mouse.getX(), love.mouse.getY()}
+end
+------------------------------------------------
+
 -- disegna
 function love.draw()
-  
+  -- *****************************************************
+
   local rectangle1 = {50, 30, 50, 100}
   local color1 = {1,0,1}
   draw_rectangle_color(rectangle1, color1)
@@ -68,4 +83,20 @@ function love.draw()
   local color3 = {1,0,0}
   if rectangle3 then draw_rectangle_color(rectangle3, color3) end
   
+  -- *****************************************************
+  
+  -- - 1 punto interno ad un 1 rettangolo -> vero/falso : point_inside_rectangle
+  
+  local rectangle_mouse_inside = { color = {0.7,1,0.2} , 150,30, 50,100 }
+  if point_inside_rectangle(point_mouse_position(), rectangle_mouse_inside) then
+    rectangle_mouse_inside.color = {0.5, 0.5, 0.7} end
+  draw_rectangle_color(rectangle_mouse_inside, rectangle_mouse_inside.color )
+  
+  -- *****************************************************
+  
+  -- - 1 punto interno ad un 1 poligono convesso -> vero/falso : point_inside_polygon_convex
+
+  -- ...
+
+  -- *****************************************************
 end
