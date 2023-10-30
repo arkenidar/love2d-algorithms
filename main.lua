@@ -65,6 +65,10 @@ local function point_mouse_position()
   return {love.mouse.getX(), love.mouse.getY()}
 end
 ------------------------------------------------
+local function input_touching()
+  return love.mouse.isDown(1)
+end
+------------------------------------------------
 
 -- disegna
 function love.draw()
@@ -91,6 +95,16 @@ function love.draw()
   if point_inside_rectangle(point_mouse_position(), rectangle_mouse_inside) then
     rectangle_mouse_inside.color = {0.5, 0.5, 0.7} end
   draw_rectangle_color(rectangle_mouse_inside, rectangle_mouse_inside.color )
+  
+  -- *****************************************************
+  
+  -- - 1 punto interno ad un 1 rettangolo -> vero/falso : point_inside_rectangle
+  
+  local rectangle_mouse_touch = { color = {0.7,1,0.2} , 250,30, 50,100 }
+  if input_touching() and
+  point_inside_rectangle(point_mouse_position(), rectangle_mouse_touch) then
+    rectangle_mouse_touch.color = {0.5, 0.5, 0.7} end
+  draw_rectangle_color(rectangle_mouse_touch, rectangle_mouse_touch.color )
   
   -- *****************************************************
   
