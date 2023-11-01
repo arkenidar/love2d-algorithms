@@ -110,6 +110,20 @@ function love.draw()
   
   -- - 1 punto interno ad un 1 poligono convesso -> vero/falso : point_inside_polygon_convex
 
+  --[[ PIP algorithms for convex and concave polygons
+    (concave polygons as an extended case of convex polygons base case).
+    ]]
+
+  --[[ external links for inspiration:
+  
+  - original in DHTML (HTML5+ES)
+  <https://github.com/arkenidar/point_in_polygon>
+
+  - derivation for Lua and Love2D
+  <https://github.com/arkenidar/Lua_Love2D_PointInPolygon-Algorithm>
+  
+  ]]
+
   -- ...
 
   -- *****************************************************
