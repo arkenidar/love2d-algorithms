@@ -12,6 +12,17 @@
                 "${workspaceFolder}"
             ],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            /* lua-local is needed for loading e.g. require("socket") */
+            "name": "Debug utils_math.lua", // (lua-local loads installed modules such as 'socket' module)",
+            "request": "launch",
+            "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+            "program": {
+                "lua": "luajit", // "lua", "lua5.1" (etc), or "luajit" etc
+                "file": "${workspaceFolder}/utils_math.lua"
+            },
+            "stopOnEntry": false
         }
     ]
 }
