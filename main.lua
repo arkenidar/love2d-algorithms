@@ -132,10 +132,31 @@ function love.draw()
 
   require("utils_math")
 
-  local center_x, center_y = 150, 150
+  local center_x, center_y = 150, 250
+  local radius = 50
+
   local angle, angle1, angle2 = point_angle_from_center(point_mouse_position(), { center_x, center_y })
-  love.graphics.print("angle: " .. tostring(math.floor(angle)) .. "°", center_x, center_y)
+  love.graphics.print("angle: " .. tostring(math.floor(angle)) .. "°", center_x, center_y - radius - 50)
 
   --love.graphics.print("angle1: ".. tostring( math.floor(angle1) ).."°", center_x,center_y+15*1)
   --love.graphics.print("angle2: ".. tostring( math.floor(angle2) ).."°", center_x,center_y+15*2)
+
+  -- circle, ring, sector
+  for px = center_x - radius, center_x + radius do
+    for py = center_y - radius, center_y + radius do
+      local condition = true
+
+      -- ring conditions
+      local distance = point_distance_from_point({ center_x, center_y }, { px, py })
+      condition = condition and distance <= radius and distance >= radius / 1.5
+
+      -- sector conditions
+      local angle_point = point_angle_from_center({ px, py }, { center_x, center_y })
+      condition = condition and angle_point <= angle
+
+      if condition then
+        love.graphics.points({ px, py })
+      end
+    end
+  end
 end
