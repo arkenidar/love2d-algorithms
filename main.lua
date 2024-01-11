@@ -100,10 +100,25 @@ function love.load()
 end
 
 ------------------------------------------------
+local animations_delta_time
+function love.update(delta_time)
+  animations_delta_time = delta_time
+end
+
+------------------------------------------------
 local input_touched = false
 local input_touching_previously = false
 
 local mode_rings = 0 -- 2 ring modes (selectable)
+
+local circle2 = {
+  radius = 50,
+  center_x = 150 + 50 * 2 + 10,
+  center_y = 250,
+  input_inside_previously = false,
+  radius_inner_animated_current = 25,
+  radius_inner_animated_target = 25,
+}
 
 -- disegna
 function love.draw()
@@ -113,7 +128,12 @@ function love.draw()
   input_touching_previously = input_touching_currently
 
   -- *****************************************************
+  test_case_combined()
 
+  circle_animations(circle2)
+end
+
+function test_case_combined()
   local rectangle1 = { 50, 30, 50, 100 }
   local color1 = { 0, 0, 1 }
   draw_rectangle_color(rectangle1, color1)
@@ -256,4 +276,67 @@ function love.draw()
       end
     end
   end
+end
+
+function circle_animations(circle)
+  local radius = circle.radius
+  local center_x, center_y = circle.center_x, circle.center_y
+  local radius_inner_animated_current = circle.radius_inner_animated_current
+  local radius_inner_animated_target = circle.radius_inner_animated_target
+
+  -- *****************************************************
+  -- pointer_went_inside, pointer_went_outside, circle.input_inside_previously
+  local distance_pointer = point_distance_from_point({ center_x, center_y }, point_mouse_position())
+  local input_inside_currently = distance_pointer <= radius
+
+  local pointer_went_inside = input_inside_currently and not circle.input_inside_previously
+  local pointer_went_outside = not input_inside_currently and circle.input_inside_previously
+
+  circle.input_inside_previously = input_inside_currently
+  -- *****************************************************
+  -- circle.radius_inner_animated_target, proportion
+
+  local proportion = 1
+  if pointer_went_inside then
+    proportion = 0.2
+    radius_inner_animated_target = circle.radius * proportion
+  elseif pointer_went_outside then
+    proportion = 0.8
+    radius_inner_animated_target = circle.radius * proportion
+  end
+
+  circle.radius_inner_animated_target = radius_inner_animated_target
+
+  -- *****************************************************
+  -- circle.radius_inner_animated_current, delta_size
+
+  local delta_size = animations_delta_time * 100
+
+  if radius_inner_animated_current < radius_inner_animated_target then
+    radius_inner_animated_current = math.min(radius_inner_animated_target, radius_inner_animated_current + delta_size)
+  elseif radius_inner_animated_current > radius_inner_animated_target then
+    radius_inner_animated_current = math.max(radius_inner_animated_target, radius_inner_animated_current - delta_size)
+  end
+
+  circle.radius_inner_animated_current = radius_inner_animated_current
+
+  -- *****************************************************
+
+  -- for each pixel in rectangle
+  for px = center_x - radius, center_x + radius do
+    for py = center_y - radius, center_y + radius do
+      -- pixel distance from circle center
+      local distance = point_distance_from_point({ center_x, center_y }, { px, py })
+      if distance <= circle.radius_inner_animated_current then
+        -- inner circle
+        love.graphics.setColor(0, 1, 0)  -- inner color
+        love.graphics.points({ px, py }) -- draw inner pixel
+      elseif distance <= radius then
+        -- outer circle
+        love.graphics.setColor(1, 1, 0)  -- outer color
+        love.graphics.points({ px, py }) -- draw pixel
+      end
+    end
+  end
+  -- *****************************************************
 end
