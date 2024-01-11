@@ -1,3 +1,29 @@
+------------------------------------------------
+-- Lua DEBUGGERS setup
+------------------------------------------------
+
+-- VISUAL STUDIO CODE debugger
+
+-- Local Lua Debugger - simple Lua debugger with no dependencies
+-- https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+require("lldebugger").start()
+
+------------------------------------------------
+
+-- ZEROBRANE STUDIO debugger
+
+-- debugging support (/pkulchenko/MobDebug setup, works also in ZeroBrane Studio)
+
+-- https://github.com/pkulchenko/MobDebug/blob/master/examples/start.lua
+-- https://raw.githubusercontent.com/pkulchenko/MobDebug/master/src/mobdebug.lua
+
+-- don't activate debugging if not specified this way
+if arg[#arg] == "-debug" then
+  -- activate debugging
+  require("mobdebug").start()
+end
+------------------------------------------------
+
 --[[
 - 1 punto interno ad un 1 rettangolo -> vero/falso : point_inside_rectangle
 - intersezione di 2 rettagoli -> rettangolo anche nullo : rectangle_operation_intersection
